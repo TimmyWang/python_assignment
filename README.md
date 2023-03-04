@@ -1,4 +1,4 @@
-# Take-Home Assignment
+# About the Project
 
 The goal of this take-home assignment is to evaluate your abilities to use API, data processing and transformation, SQL, and implement a new API service in Python.
 
