@@ -28,16 +28,17 @@ def get_avg_stats(symbol="", start_date="", end_date="", db:Session=Depends(get_
 		return {"data":{}, "info":{"error":error_msg}}
 
 	# If all parameters are valid, use them to query data in DB
-	data = db.query(
-				FinancialData.open_price,
-				FinancialData.close_price,
-				FinancialData.volume,
-				FinancialData.date
-			).filter(
-				FinancialData.symbol==symbol,
-				FinancialData.date>=start_date,
-				FinancialData.date<=end_date
-			).all()
+	data = \
+		db.query(
+			FinancialData.open_price,
+			FinancialData.close_price,
+			FinancialData.volume,
+			FinancialData.date
+		).filter(
+			FinancialData.symbol==symbol,
+			FinancialData.date>=start_date,
+			FinancialData.date<=end_date
+		).all()
 
 	count = len(data)
 

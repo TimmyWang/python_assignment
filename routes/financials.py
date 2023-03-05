@@ -30,17 +30,18 @@ def get_raw_data(symbol="", start_date="1900-01-01", end_date="2999-12-31", limi
 		return {"data":[], "pagination":{}, "info":{"error":error_msg}}
 
 	# If all parameters are valid, use them to query data in DB and return it at the end
-	query = db.query(
-				FinancialData.symbol,
-				FinancialData.date,
-				FinancialData.open_price,
-				FinancialData.close_price,
-				FinancialData.volume
-			).filter(
-				True if not symbol else FinancialData.symbol==symbol,
-				FinancialData.date>=start_date,
-				FinancialData.date<=end_date
-			)
+	query = \
+		db.query(
+			FinancialData.symbol,
+			FinancialData.date,
+			FinancialData.open_price,
+			FinancialData.close_price,
+			FinancialData.volume
+		).filter(
+			True if not symbol else FinancialData.symbol==symbol,
+			FinancialData.date>=start_date,
+			FinancialData.date<=end_date
+		)
 
 	count = query.count()
 	limit = int(limit)
