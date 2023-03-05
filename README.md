@@ -36,7 +36,7 @@ Run the following command:
 docker-compose up
 ```
 
-You should then see on the terminal at last:
+You should see following message on the terminal when the service is ready:
 
 ```
 fastapi_1  | INFO:     Application startup complete.
