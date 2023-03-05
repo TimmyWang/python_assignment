@@ -223,50 +223,54 @@ Response can be:
 ```
 python_assignment/
 ├── config
-│    ├── __init__.py (A)
+│    ├── __init__.py (A1)
+│    ├── api.py (A2)
+│    ├── db.py (A3)
 ├── database
-│    ├── __init__.py (B)
-│    ├── model.py (C)
+│    ├── __init__.py (B1)
+│    ├── model.py (B2)
 ├── routes
-│    ├── financials.py (D)
-│    ├── statistics.py (E)
+│    ├── financials.py (C1)
+│    ├── statistics.py (C2)
 ├── utils
-│    ├── external_data_validation.py (F)
-│    ├── input_validation.py (G)
+│    ├── external_data_validation.py (D1)
+│    ├── input_validation.py (D2)
 │    ├── help_func.py
-├── Dockerfile (H)
-├── docker-compose.yml (I)
+├── Dockerfile (E)
+├── docker-compose.yml (F)
 ├── README.md
 ├── requirements.txt
-├── get_raw_data.py (J)
-├── run.py (K)
-└── .env (L)
+├── get_raw_data.py (G)
+├── run.py (H)
+└── .env (I)
 
 ```
 
-- A: storing variables used in other files
-- B: setting up database
-- C: defining table in ORM
-- D: building up the endpoint 1
-- E: building up the endpoint 2
-- F: validating data from AlphaVantage API
-- G: validating parameters for endpoints 1 and 2
-- H: building FastAPI service image
-- I: starting FastAPI and MySQL DB services
-- J: fetching data from AlphaVantage API and save it in DB
-- K: running FastAPI service
-- L: storing confidential data (**YOU SHOULD CREATE YOUR OWN .ENV FILE**)
+- A1: loading environment variables
+- A2: storing api related variables
+- A3: storing db related variables
+- B1: setting up database
+- B2: defining table in ORM
+- C1: building up the endpoint 1
+- C2: building up the endpoint 2
+- D1: validating data from AlphaVantage API
+- D2: validating parameters for endpoints 1 and 2
+- E: building FastAPI service image
+- F: starting FastAPI and MySQL DB services
+- G: fetching data from AlphaVantage API and save it in DB
+- H: running FastAPI service
+- I: storing confidential data (**YOU SHOULD CREATE YOUR OWN .ENV FILE**)
 
 ### Library choices
 
-| Library                | Description                                                                                                    |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------- |
-| fastapi                | used to build APIs. it's easy to set up and has built-in interface for testing (http://localhost:5000/docs)    |
-| uvicorn                | an ASGI web server implementation for Python                                                                   |
-| sqlalchemy             | Object-Relational Mapping (ORM) framework that allows developers to construct SQL queries in a python-like way |
-| mysql-connector-python | provides a Python interface for connecting to and interacting with MySQL databases                             |
-| python-dotenv          | used to load environment variables (e.g. API KEY) in python code                                               |
-| requests               | used to make http requests in python code                                                                      |
+| Library                | Description                                                                                                       |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| fastapi                | used to build APIs. it's easy to set up and has built-in interface for testing (http://localhost:5000/docs)       |
+| uvicorn                | an ASGI web server implementation for Python                                                                      |
+| sqlalchemy             | an Object-Relational Mapping (ORM) framework that allows developers to construct SQL queries in a python-like way |
+| mysql-connector-python | providing a Python interface for connecting to and interacting with MySQL databases                               |
+| python-dotenv          | used to load environment variables (e.g. API KEY) in python code                                                  |
+| requests               | used to make http requests in python code                                                                         |
 
 ### How to store API KEY
 
