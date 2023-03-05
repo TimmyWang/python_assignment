@@ -1,9 +1,9 @@
-## Project Description
+# Project Description
 
 ### Goal
 
-1. Get data from [AlphaVantage](https://www.alphavantage.co/documentation/) API and insert processed data into local database
-2. Build 2 API endpoints to retrieve above-mentioned data in different ways
+1. Get data from [AlphaVantage](https://www.alphavantage.co/documentation/) API and insert processed data into local database.
+2. Build 2 APIs that retrieve above-mentioned data in different ways.
 
 ### Tech Stack
 
@@ -61,13 +61,13 @@ Note: You should see messages showing the result after executing `python get_raw
 endpoint:
 
 ```
-http://localhost:5000/api/financial_data
+http://localhost:5000/api/financial_data/
 ```
 
 Sample request:
 
 ```
-curl -X GET 'http://localhost:5000/api/financial_data?start_date=2023-01-01&end_date=2023-01-14&symbol=IBM&limit=3&page=2'
+curl -X GET 'http://localhost:5000/api/financial_data/?start_date=2023-01-01&end_date=2023-03-31&symbol=IBM&limit=3&page=2'
 ```
 
 | Parameter  | Required | Format           | Note                              |
@@ -147,13 +147,13 @@ Response can be:
 endpoint:
 
 ```
-http://localhost:5000/api/statistics
+http://localhost:5000/api/statistics/
 ```
 
 Sample request:
 
 ```
-curl -X GET http://localhost:5000/api/statistics?start_date=2023-01-01&end_date=2023-01-31&symbol=IBM
+curl -X GET 'http://localhost:5000/api/statistics/?start_date=2023-01-01&end_date=2023-03-31&symbol=IBM'
 ```
 
 | Parameter  | Required | Format           | Note         |
