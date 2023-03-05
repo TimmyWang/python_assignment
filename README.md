@@ -1,228 +1,284 @@
 # About the Project
 
-The goal of this take-home assignment is to evaluate your abilities to use API, data processing and transformation, SQL, and implement a new API service in Python.
+## Purpose
 
-You should first fork this repository, and then send us the code or the url of your forked repository via email.
+1. Get data from [AlphaVantage](https://www.alphavantage.co/documentation/) API and insert processed data into local database
+2. Build APIs to retrieve above-mentioned data in different ways
 
-**Please do not submit any pull requests to this repository.**
+## Tech Stack
 
-You need to perform the following **Two** tasks:
+- Backend: python (FastAPI)
+- Database: MySQL
+- Container: Docker
 
-## Task1
-### Problem Statement:
-1. Retrieve the financial data of Two given stocks (IBM, Apple Inc.)for the most recently two weeks. Please using an free API provider named [AlphaVantage](https://www.alphavantage.co/documentation/) 
-2. Process the raw API data response, a sample output after process should be like:
+## Prerequisites
+
+Make sure you have installed following tools in your computer:
+
+- Python (recommended version 3.10)
+- Docker
+
+# Steps to Run the Services
+
+## 1. Create `.env` file to store API key and DB password
+
+`.env`
+
 ```
-{
-    "symbol": "IBM",
-    "date": "2023-02-14",
-    "open_price": "153.08",
-    "close_price": "154.52",
-    "volume": "62199013",
-},
-{
-    "symbol": "IBM",
-    "date": "2023-02-13",
-    "open_price": "153.08",
-    "close_price": "154.52",
-    "volume": "59099013"
-},
-{
-    "symbol": "IBM",
-    "date": "2023-02-12",
-    "open_price": "153.08",
-    "close_price": "154.52",
-    "volume": "42399013"
-},
-...
-``` 
-3. Insert the records above into a table named `financial_data` in your local database, column name should be same as the processed data from step 2 above (symbol, date, open_price, close_price, volume) 
+ALPHAVANTAGE_API_KEY=YOUR_API_KEY
+MYSQL_ROOT_PASSWORD=YOUR_DB_PASSWORD
+```
 
+## 2. Start the DB and the API containers
 
-## Task2
-### Problem Statement:
-1. Implement an Get financial_data API to retrieve records from `financial_data` table, please note that:
-    - the endpoint should accept following parameters: start_date, end_date, symbol, all parameters are optional
-    - the endpoint should support pagination with parameter: limit and page, if no parameters are given, default limit for one page is 5
-    - the endpoint should return an result with three properties:
-        - data: an array includes actual results
-        - pagination: handle pagination with four properties
-            
-            - count: count of all records without panigation
-            - page: current page index
-            - limit: limit of records can be retrieved for single page
-            - pages: total number of pages
-        - info: includes any error info if applies
-    
+Later we will fetch external data and store it in DB (purpose 1), so we have to **start the database** and **create the table** first.
+Run the following command:
 
-Sample Request:
-```bash
+```
+docker-compose up
+```
+
+You should then see on the terminal:
+
+```
+fastapi_1  | INFO:     Application startup complete.
+```
+
+## 3. Fetch external data and save it in DB (purpose 1)
+
+Run the commands:
+
+```
+pip install -r requirements.txt
+```
+
+```
+python get_raw_data.py
+```
+
+Note: You should see messages showing the result after executing `python get_raw_data.py`
+
+## 4. Test API service (purpose 2)
+
+### Two endpoints:
+
+```
+http://localhost:5000/api/financial_data
+```
+
+```
+http://localhost:5000/api/statistics
+```
+
+### Test the first endpoint
+
+Sample request:
+
+```
 curl -X GET 'http://localhost:5000/api/financial_data?start_date=2023-01-01&end_date=2023-01-14&symbol=IBM&limit=3&page=2'
-
 ```
-Sample Response:
+
+| Parameter  | Required | Format           | Note                              |
+| ---------- | -------- | ---------------- | --------------------------------- |
+| start_date | No       | YYYY-MM-DD       |                                   |
+| end_date   | No       | YYYY-MM-DD       |                                   |
+| symbol     | No       | 20 charaters max | stock symbol                      |
+| limit      | No       | positive integer | number of records for single page |
+| page       | No       | positive integer | current page index                |
+
+Response can be:
+
+1. You provide parameters correctly and get some data back:
+
 ```
 {
     "data": [
         {
             "symbol": "IBM",
-            "date": "2023-01-05",
-            "open_price": "153.08",
-            "close_price": "154.52",
-            "volume": "62199013",
+            "date": "2023-02-13",
+            "open_price": 136,
+            "close_price": 137.35,
+            "volume": 4403015
         },
-        {
-            "symbol": "IBM",
-            "date": "2023-01-06",
-            "open_price": "153.08",
-            "close_price": "154.52",
-            "volume": "59099013"
-        },
-        {
-            "symbol": "IBM",
-            "date": "2023-01-09",
-            "open_price": "153.08",
-            "close_price": "154.52",
-            "volume": "42399013"
-        }
+        ...
     ],
     "pagination": {
-        "count": 20,
-        "page": 2,
-        "limit": 3,
-        "pages": 7
+        "count": 28,
+        "page": 1,
+        "limit": 5,
+        "pages": 6
     },
-    "info": {'error': ''}
+    "info": {
+        "error": ""
+    }
 }
-
 ```
 
-2. Implement an Get statistics API to perform the following calculations on the data in given period of time:
-    - Calculate the average daily open price for the period
-    - Calculate the average daily closing price for the period
-    - Calculate the average daily volume for the period
+2. You provide parameters correctly and get empty data back (There is no data based on your query):
 
-    - the endpoint should accept following parameters: start_date, end_date, symbols, all parameters are required
-    - the endpoint should return an result with two properties:
-        - data: calculated statistic results
-        - info: includes any error info if applies
+```
+{
+    "data": [],
+    "pagination": {
+        "count": 0,
+        "page": 1,
+        "limit": 5,
+        "pages": 0
+    },
+    "info": {
+        "error": ""
+    }
+}
+```
+
+3. You provide parameters incorrectly and get some error messages:
+
+```
+{
+    "data": [],
+    "pagination": {},
+    "info": {
+        "error": {
+            "symbol": [
+                "cannot exceed 20 characters"
+            ],
+            "end_date": [
+                "not a valid date string (YYYY-MM-DD)"
+            ]
+        }
+    }
+}
+```
+
+### Test the second endpoint
 
 Sample request:
-```bash
-curl -X GET http://localhost:5000/api/statistics?start_date=2023-01-01&end_date=2023-01-31&symbol=IBM
 
 ```
-Sample response:
+curl -X GET http://localhost:5000/api/statistics?start_date=2023-01-01&end_date=2023-01-31&symbol=IBM
+```
+
+| Parameter  | Required | Format           | Note         |
+| ---------- | -------- | ---------------- | ------------ |
+| start_date | Yes      | YYYY-MM-DD       |              |
+| end_date   | Yes      | YYYY-MM-DD       |              |
+| symbol     | Yes      | 20 charaters max | stock symbol |
+
+Response can be:
+
+1. You provide parameters correctly and get some data back:
+
 ```
 {
     "data": {
-        "start_date": "2023-01-01",
-        "end_date": "2023-01-31",
+        "start_date": "2023-02-13",
+        "end_date": "2023-02-21",
         "symbol": "IBM",
-        "average_daily_open_price": 123.45,
-        "average_daily_close_price": 234.56,
-        "average_daily_volume": 1000000
+        "average_daily_open_price": 135.39,
+        "average_daily_close_price": 135.25,
+        "average_daily_volume": 3466846
     },
-    "info": {'error': ''}
+    "info": {
+        "error": ""
+    }
 }
-
 ```
 
-## What you should deliver:
-Directory structure:
+2. You provide parameters correctly and get empty data back (There is no data based on your query):
+
+```
+{
+    "data": {},
+    "info": {
+        "error": "",
+        "note": "No data found under the conditions given"
+    }
+}
+```
+
+3. You provide parameters incorrectly and get some error messages:
+
+```
+{
+    "data": {},
+    "info": {
+        "error": {
+            "symbol": [
+                "cannot exceed 20 characters"
+            ],
+            "start_date": [
+                "missing parameter",
+                "not a valid date string (YYYY-MM-DD)"
+            ],
+            "end_date": [
+                "not a valid date string (YYYY-MM-DD)"
+            ]
+        }
+    }
+}
+```
+
+# Others
+
+## Directory structure
+
 ```
 project-name/
-├── model.py
-├── schema.sql
-├── get_raw_data.py
-├── Dockerfile
-├── docker-compose.yml
+├── config
+│    ├── __init__.py (A)
+├── database
+│    ├── __init__.py (B)
+│    ├── model.py (C)
+├── routes
+│    ├── financials.py (D)
+│    ├── statistics.py (E)
+├── utils
+│    ├── external_data_validation.py (F)
+│    ├── input_validation.py (G)
+│    ├── help_func.py
+├── Dockerfile (H)
+├── docker-compose.yml (I)
 ├── README.md
 ├── requirements.txt
-└── financial/<Include API service code here>
+├── get_raw_data.py (J)
+├── run.py (K)
+└── .env (L)
 
 ```
 
-1. A `get_raw_data.py` file in root folder
+- A: storing variables used in other files
+- B: setting up database
+- C: defining table in ORM
+- D: building up the endpoint 1
+- E: building up the endpoint 2
+- F: validating data from AlphaVantage API
+- G: validating parameters for endpoints 1 and 2
+- H: building FastAPI service image
+- I: starting FastAPI and MySQL DB services
+- J: fetching data from AlphaVantage API and save it in DB
+- K: running FastAPI service
+- L: storing confidential data (**YOU SHOULD CREATE .ENV FILE YOURSELF**)
 
-    Action: 
-    
-    Run 
-    ```bash
-    python get_raw_data.py
-    ```
+## Library choices
 
-    Expectation: 
-    
-    1. Financial data will be retrieved from API and processed,then insert all processed records into table `financial_data` in local db
-    2. Duplicated records should be avoided when executing get_raw_data multiple times, consider implementing your own logic to perform upsert operation if the database you select does not have native support for such operation.
+| Library                | Description                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- |
+| fastapi                | used to build APIs. it's easy to set up and has built-in interface for testing (http://localhost:5000/docs)    |
+| uvicorn                | an ASGI web server implementation for Python                                                                   |
+| sqlalchemy             | Object-Relational Mapping (ORM) framework that allows developers to construct SQL queries in a python-like way |
+| mysql-connector-python | provides a Python interface for connecting to and interacting with MySQL databases                             |
+| python-dotenv          | used to load environment variables (e.g. API KEY) in python code                                               |
+| requests               | used to make http requests in python code                                                                      |
 
-2. A `schema.sql` file in root folder
-    
-    Define schema for financial_data table, if you prefer to use an ORM library, just **ignore** this deliver item and jump to item3 below.
+## How to store API KEY
 
-    Action: Run schema definition in local db
+| Stage       | Options                                                                                                                                                                         |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Development | API KEYs can be stored with other confidential information in `.env` file.                                                                                                      |
+| Production  | Especially when working on a project with a big team, you might want to consider using API secret management services to ensure that only authorized users can access the keys. |
 
-    Expectation: A new table named `financial_data` should be created if not exists in db
+## Database migration
 
-3. (Optional) A `model.py` file: 
-    
-    If you perfer to use a ORM library instead of DDL, please include your model definition in `model.py`, and describe how to perform migration in README.md file
+SQLAlchemy includes a built-in migration system called "Alembic" that makes it easy to perform database migrations.
 
-4. A `Dockerfile` file in root folder
-
-    Build up your local API service
-
-5. A `docker-compose.yml` file in root folder
-
-    Two services should be defined in docker-compose.yml: Database and your API
-
-    Action:
-
-    ```bash
-    docker-compose up
-    ```
-
-    Expectation:
-    Both database and your API service is up and running in local development environment
-
-6. A `financial` sub-folder:
-
-    Put all API implementation related codes in here
-
-7. `README.md`: 
-
-    You should include:
-    - A brief project description
-    - Tech stack you are using in this project
-    - How to run your code in local environment
-    - Provide a description of how to maintain the API key to retrieve financial data from AlphaVantage in both local development and production environment.
-
-8. A `requirements.txt` file:
-
-    It should contain your dependency libraries.
-
-## Requirements:
-
-- The program should be written in Python 3.
-- You are free to use any API and libraries you like, but should include a brief explanation of why you chose the API and libraries you used in README.
-- The API key to retrieve financial data should be stored securely. Please provide a description of how to maintain the API key from both local development and production environment in README.
-- The database in Problem Statement 1 could be created using SQLite/MySQL/.. with your own choice.
-- The program should include error handling to handle cases where the API returns an error or the data is not in the correct format.
-- The program should cover as many edge cases as possible, not limited to expectations from deliverable above.
-- The program should use appropriate data structures and algorithms to store the data and perform the calculations.
-- The program should include appropriate documentation, including docstrings and inline comments to explain the code.
-
-## Evaluation Criteria:
-
-Your solution will be evaluated based on the following criteria:
-
-- Correctness: Does the program produce the correct results?
-- Code quality: Is the code well-structured, easy to read, and maintainable?
-- Design: Does the program make good use of functions, data structures, algorithms, databases, and libraries?
-- Error handling: Does the program handle errors and unexpected input appropriately?
-- Documentation: Is the code adequately documented, with clear explanations of the algorithms and data structures used?
-
-## Additional Notes:
-
-You have 7 days to complete this assignment and submit your solution.
+More information on the [Alembic Documentation](https://alembic.sqlalchemy.org/en/latest/tutorial.html)
