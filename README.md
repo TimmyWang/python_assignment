@@ -247,12 +247,12 @@ python_assignment/
 ```
 
 - A1: loading environment variables
-- A2: storing api related variables
+- A2: storing external api related variables
 - A3: storing db related variables
 - B1: setting up database
 - B2: defining table in ORM
-- C1: building up the endpoint 1
-- C2: building up the endpoint 2
+- C1: building up API endpoint 1
+- C2: building up API endpoint 2
 - D1: validating data from AlphaVantage API
 - D2: validating parameters for endpoints 1 and 2
 - E: building FastAPI service image

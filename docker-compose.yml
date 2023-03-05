@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=ctw
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - LANG=C.UTF-8
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-config:/etc/mysql
+  fastapi:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+
+volumes:
+  mysql-data:
+    driver: local
+  mysql-config:
+    driver: local
+
+
+
+
