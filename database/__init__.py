@@ -26,7 +26,7 @@ class CreateTableError(Exception):
 
 def create_tables(try_times, wait_seconds):
     '''
-    This func gets called when the FastAPI service starts.
+    This function gets called when the FastAPI service starts.
     It will create tables defined in database/models.py if not created yet.
     Because the service might try to create tables before the DB is ready (which will cause error),
     while loop is implemented to ensure the service will try some times before giving up.

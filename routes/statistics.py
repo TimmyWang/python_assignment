@@ -16,7 +16,7 @@ route = APIRouter()
 @route.get("/")
 def get_avg_stats(symbol="", start_date="", end_date="", db:Session=Depends(get_db)):
 
-	# Valiate request parameters
+	# Validate request parameters
 	validation = InputValidation()
 	validation.add(name='symbol', value=symbol, constraints=[ct.Required(), ct.Length(SYMBOL_MAX_LENGTH)])
 	validation.add(name='start_date', value=start_date, constraints=[ct.Required(), ct.DateString()])

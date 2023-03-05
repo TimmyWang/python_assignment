@@ -16,7 +16,7 @@ route = APIRouter()
 @route.get("/")
 def get_raw_data(symbol="", start_date="1900-01-01", end_date="2999-12-31", limit=5, page=1, db:Session=Depends(get_db)):
 
-	# Valiate request parameters
+	# Validate request parameters
 	validation = InputValidation()
 	validation.add(name='symbol', value=symbol, constraints=[ct.Length(SYMBOL_MAX_LENGTH)])
 	validation.add(name='start_date', value=start_date, constraints=[ct.DateString()])

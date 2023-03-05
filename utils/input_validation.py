@@ -59,7 +59,7 @@ class InputValidation:
 	'''
 	To validate request parameters:
 	1. Create an object: X = InputValidation()
-	2. Add constraints you wnat to check: X.add(parameter_name, parameter_value, constraint_list=[Constraint.Required,...])
+	2. Add constraints you wnat to check: X.add(parameter_name, parameter_value, constraint_list=[Constraint.Required(),...])
 	3. Check if there is any error: error_msg = X.get_error_msg()
 	'''
 	
