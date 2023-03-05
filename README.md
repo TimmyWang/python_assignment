@@ -1,6 +1,6 @@
-# Project Description
+## Project Description
 
-### Purpose
+### Goal
 
 1. Get data from [AlphaVantage](https://www.alphavantage.co/documentation/) API and insert processed data into local database
 2. Build 2 API endpoints to retrieve above-mentioned data in different ways
@@ -18,11 +18,9 @@ Make sure you have installed following tools in your computer:
 - Python (recommended version 3.10)
 - Docker
 
-# Steps to Run the Services
+## Steps to Run the Services
 
 ### 1. Create `.env` file to store API key and DB password
-
-`.env`
 
 ```
 ALPHAVANTAGE_API_KEY=YOUR_API_KEY
@@ -31,7 +29,7 @@ MYSQL_ROOT_PASSWORD=YOUR_DB_PASSWORD
 
 ### 2. Start the DB and the API containers
 
-Later we will fetch external data and store it in DB (purpose 1), so we have to **start the database** and **create the table** first.
+Later we will fetch external data and store it in DB (goal 1), so we have to **start the database** and **create the table** first.
 Run the following command:
 
 ```
@@ -44,7 +42,7 @@ You should then see on the terminal:
 fastapi_1  | INFO:     Application startup complete.
 ```
 
-### 3. Fetch external data and save it in DB (purpose 1)
+### 3. Fetch external data and save it in DB (goal 1)
 
 Run the commands:
 
@@ -58,7 +56,7 @@ python get_raw_data.py
 
 Note: You should see messages showing the result after executing `python get_raw_data.py`
 
-### 4. Test API endpoint 1 (purpose 2)
+### 4. Test API endpoint 1 (goal 2)
 
 endpoint:
 
@@ -144,7 +142,7 @@ Response can be:
 }
 ```
 
-### 5. Test API endpoint 2 (purpose 2)
+### 5. Test API endpoint 2 (goal 2)
 
 endpoint:
 
@@ -218,7 +216,7 @@ Response can be:
 }
 ```
 
-# Others
+## Others
 
 ### Repository structure
 
