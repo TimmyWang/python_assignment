@@ -53,13 +53,13 @@ def get_avg_stats(symbol="", start_date="", end_date="", db:Session=Depends(get_
 	start_date, end_date = get_boundary_dates(data)
 
 	data = {
-        "start_date": start_date,
-        "end_date": end_date,
-        "symbol": symbol,
-        "average_daily_open_price": calculate_avg([record.open_price for record in data],2),
-        "average_daily_close_price": calculate_avg([record.close_price for record in data],2),
-        "average_daily_volume": calculate_avg([record.volume for record in data],0)
-    }
+		"start_date": start_date,
+		"end_date": end_date,
+		"symbol": symbol,
+		"average_daily_open_price": calculate_avg([record.open_price for record in data],2),
+		"average_daily_close_price": calculate_avg([record.close_price for record in data],2),
+		"average_daily_volume": calculate_avg([record.volume for record in data],0)
+	}
 
 	return {"data":data, "info":{'error':""}}
 
