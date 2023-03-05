@@ -1,17 +1,17 @@
-# About the Project
+# Project Description
 
-## Purpose
+### Purpose
 
 1. Get data from [AlphaVantage](https://www.alphavantage.co/documentation/) API and insert processed data into local database
-2. Build APIs to retrieve above-mentioned data in different ways
+2. Build 2 API endpoints to retrieve above-mentioned data in different ways
 
-## Tech Stack
+### Tech Stack
 
 - Backend: python (FastAPI)
 - Database: MySQL
 - Container: Docker
 
-## Prerequisites
+### Prerequisites
 
 Make sure you have installed following tools in your computer:
 
@@ -20,7 +20,7 @@ Make sure you have installed following tools in your computer:
 
 # Steps to Run the Services
 
-## 1. Create `.env` file to store API key and DB password
+### 1. Create `.env` file to store API key and DB password
 
 `.env`
 
@@ -29,7 +29,7 @@ ALPHAVANTAGE_API_KEY=YOUR_API_KEY
 MYSQL_ROOT_PASSWORD=YOUR_DB_PASSWORD
 ```
 
-## 2. Start the DB and the API containers
+### 2. Start the DB and the API containers
 
 Later we will fetch external data and store it in DB (purpose 1), so we have to **start the database** and **create the table** first.
 Run the following command:
@@ -44,7 +44,7 @@ You should then see on the terminal:
 fastapi_1  | INFO:     Application startup complete.
 ```
 
-## 3. Fetch external data and save it in DB (purpose 1)
+### 3. Fetch external data and save it in DB (purpose 1)
 
 Run the commands:
 
@@ -58,19 +58,13 @@ python get_raw_data.py
 
 Note: You should see messages showing the result after executing `python get_raw_data.py`
 
-## 4. Test API service (purpose 2)
+### 4. Test API endpoint 1 (purpose 2)
 
-### Two endpoints:
+endpoint:
 
 ```
 http://localhost:5000/api/financial_data
 ```
-
-```
-http://localhost:5000/api/statistics
-```
-
-### Test the first endpoint
 
 Sample request:
 
@@ -150,7 +144,13 @@ Response can be:
 }
 ```
 
-### Test the second endpoint
+### 5. Test API endpoint 2 (purpose 2)
+
+endpoint:
+
+```
+http://localhost:5000/api/statistics
+```
 
 Sample request:
 
@@ -220,10 +220,10 @@ Response can be:
 
 # Others
 
-## Directory structure
+### Repository structure
 
 ```
-project-name/
+python_assignment/
 ├── config
 │    ├── __init__.py (A)
 ├── database
@@ -257,9 +257,9 @@ project-name/
 - I: starting FastAPI and MySQL DB services
 - J: fetching data from AlphaVantage API and save it in DB
 - K: running FastAPI service
-- L: storing confidential data (**YOU SHOULD CREATE .ENV FILE YOURSELF**)
+- L: storing confidential data (**YOU SHOULD CREATE YOUR OWN .ENV FILE**)
 
-## Library choices
+### Library choices
 
 | Library                | Description                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -270,14 +270,14 @@ project-name/
 | python-dotenv          | used to load environment variables (e.g. API KEY) in python code                                               |
 | requests               | used to make http requests in python code                                                                      |
 
-## How to store API KEY
+### How to store API KEY
 
 | Stage       | Options                                                                                                                                                                         |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Development | API KEYs can be stored with other confidential information in `.env` file.                                                                                                      |
 | Production  | Especially when working on a project with a big team, you might want to consider using API secret management services to ensure that only authorized users can access the keys. |
 
-## Database migration
+### Database migration
 
 SQLAlchemy includes a built-in migration system called "Alembic" that makes it easy to perform database migrations.
 
