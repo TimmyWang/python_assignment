@@ -3,7 +3,7 @@
 ### Goal
 
 1. Get data from [AlphaVantage](https://www.alphavantage.co/documentation/) API and insert processed data into local database.
-2. Build 2 APIs that retrieve above-mentioned data in different ways.
+2. Build 2 APIs to retrieve and manipulate DB data in different ways.
 
 ### Tech Stack
 
