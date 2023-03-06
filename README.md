@@ -256,7 +256,7 @@ python_assignment/
 - D1: validating data from AlphaVantage API
 - D2: validating parameters for endpoints 1 and 2
 - E: building FastAPI service image
-- F: starting FastAPI and MySQL DB services
+- F: starting FastAPI and MySQL DB containers
 - G: fetching data from AlphaVantage API and save it in DB
 - H: running FastAPI service
 - I: storing confidential data (**YOU SHOULD CREATE YOUR OWN .ENV FILE**)
