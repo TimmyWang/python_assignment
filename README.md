@@ -58,7 +58,7 @@ Note: You should see messages showing the result after executing `python get_raw
 
 ### 4. Test API endpoint 1 (goal 2)
 
-endpoint:
+Endpoint:
 
 ```
 http://localhost:5000/api/financial_data/
@@ -144,7 +144,7 @@ Response can be:
 
 ### 5. Test API endpoint 2 (goal 2)
 
-endpoint:
+Endpoint:
 
 ```
 http://localhost:5000/api/statistics/
